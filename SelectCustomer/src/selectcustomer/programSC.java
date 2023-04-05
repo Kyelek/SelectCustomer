@@ -3,7 +3,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package selectcustomer;
-
 import conexion.conexion;
 import java.sql.*;
 import javax.swing.*;
@@ -17,12 +16,15 @@ public class programSC extends javax.swing.JFrame {
 
     conexion conex = new conexion();
     Connection con = (Connection) conex.getConexion();
+    
+    
 
     /**
      * Creates new form programSC
      */
     public programSC() {
         initComponents();
+        
     }
 
     public static void main(String args[]) {
@@ -52,11 +54,24 @@ public class programSC extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new programSC().setVisible(true);
+                //new programSC().setVisible(true);
+                iniciarPrograma();
+                
             }
         });
     }
-
+    public static void iniciarPrograma(){
+        programSC inicio = new programSC();
+        inicio.setVisible(true);
+    }
+    public void iniciaMenu(){
+        menuForm menu = new menuForm();       
+        menu.setVisible(true);    
+    }
+    public void iniciaregister(){
+        formRegister register = new formRegister();
+        register.setVisible(true);
+    }
     public void validarUsuario(String user, String pass) {
 
         String SQL = "Select usuario,contrasena from login WHERE contrasena = '" + pass + "' ";
@@ -73,7 +88,11 @@ public class programSC extends javax.swing.JFrame {
                 contrasena = rset.getString("contrasena");
 
                 System.out.println(usuario + contrasena + " el while si");
+                //aqui vendria el cambio al menú
+                iniciaMenu();
 
+            }else{
+                System.out.println("Usuario o contraseña erroneos");
             }
 
         } catch (Exception e) {
@@ -81,7 +100,7 @@ public class programSC extends javax.swing.JFrame {
         }
 
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -96,6 +115,7 @@ public class programSC extends javax.swing.JFrame {
         txt_usuario = new javax.swing.JTextField();
         btn_login = new javax.swing.JButton();
         txt_pass = new javax.swing.JPasswordField();
+        btn_register = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -107,6 +127,13 @@ public class programSC extends javax.swing.JFrame {
         btn_login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_loginActionPerformed(evt);
+            }
+        });
+
+        btn_register.setText("Nuevo Empleado");
+        btn_register.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_registerActionPerformed(evt);
             }
         });
 
@@ -125,8 +152,10 @@ public class programSC extends javax.swing.JFrame {
                 .addComponent(txt_pass, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
                 .addGap(34, 34, 34))
             .addGroup(layout.createSequentialGroup()
-                .addGap(158, 158, 158)
+                .addGap(76, 76, 76)
                 .addComponent(btn_login, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(97, 97, 97)
+                .addComponent(btn_register)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -139,7 +168,9 @@ public class programSC extends javax.swing.JFrame {
                     .addComponent(txt_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txt_pass, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(65, 65, 65)
-                .addComponent(btn_login)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btn_login)
+                    .addComponent(btn_register))
                 .addContainerGap(76, Short.MAX_VALUE))
         );
 
@@ -153,12 +184,18 @@ public class programSC extends javax.swing.JFrame {
         validarUsuario(user, pass);
     }//GEN-LAST:event_btn_loginActionPerformed
 
+    private void btn_registerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_registerActionPerformed
+        // TODO add your handling code here:
+        iniciaregister();
+    }//GEN-LAST:event_btn_registerActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_login;
+    private javax.swing.JButton btn_register;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPasswordField txt_pass;

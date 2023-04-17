@@ -4,6 +4,10 @@
  */
 package selectcustomer;
 
+import conexion.conexion;
+import java.sql.*;
+import javax.swing.*;
+
 /**
  *
  * @author Kyelek
@@ -13,9 +17,13 @@ public class addClientes extends javax.swing.JFrame {
     /**
      * Creates new form addClientes
      */
+    conexion conex = new conexion();
+    Connection con = (Connection) conex.getConexion();
+    
     public addClientes() {
         initComponents();
     }
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -46,6 +54,27 @@ public class addClientes extends javax.swing.JFrame {
                 new addClientes().setVisible(true);
             }
         });
+    }
+    
+    public void registrarCliente(){
+        
+        String SQL = "INSERT INTO clientes (nombre,apellidos,domicilio,telefono,email) VALUES (?,?,?,?,?)";
+        
+        try{
+            PreparedStatement pst = con.prepareStatement(SQL);
+            
+            pst.setString(1,txt_nombre.getText());
+            pst.setString(2,txt_apellidos.getText());
+            pst.setString(3,txt_domicilio.getText());
+            pst.setInt(4,Integer.parseInt(txt_telefono.getText()));
+            pst.setString(5,txt_email.getText());
+            
+            pst.execute();
+            System.out.println("Cliente guardado");
+            dispose();
+        }catch(Exception e){
+            System.out.println("No se ha insertado el registro");
+        }
     }
 
     /**
@@ -116,6 +145,11 @@ public class addClientes extends javax.swing.JFrame {
         });
 
         btn_guardar.setText("Guardar");
+        btn_guardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_guardarActionPerformed(evt);
+            }
+        });
 
         btn_cancelar.setText("Cancelar");
 
@@ -214,6 +248,11 @@ public class addClientes extends javax.swing.JFrame {
     private void txt_emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_emailActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_emailActionPerformed
+
+    private void btn_guardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_guardarActionPerformed
+        // TODO add your handling code here:
+        registrarCliente();
+    }//GEN-LAST:event_btn_guardarActionPerformed
 
     /**
      * @param args the command line arguments

@@ -9,9 +9,10 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Inicio programa
  * @author Kyelek
  */
+
 public class programSC extends javax.swing.JFrame {
 
     conexion conex = new conexion();
@@ -62,14 +63,17 @@ public class programSC extends javax.swing.JFrame {
     }
     public static void iniciarPrograma(){
         programSC inicio = new programSC();
+        inicio.setTitle("SelecCustomer.exe");
         inicio.setVisible(true);
     }
     public void iniciaMenu(){
-        menuForm menu = new menuForm();       
+        menuForm menu = new menuForm();
+        menu.setTitle("Menu");
         menu.setVisible(true);    
     }
     public void iniciaregister(){
         formRegister register = new formRegister();
+        register.setTitle("Registrar nuevo empleado");
         register.setVisible(true);
     }
     public void validarUsuario(String user, String pass) {

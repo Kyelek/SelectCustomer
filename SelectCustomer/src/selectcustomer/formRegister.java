@@ -69,6 +69,7 @@ public class formRegister extends javax.swing.JFrame {
 
             pst.execute();
             System.out.println("registro guardado");
+            
             dispose();
 
         } catch (Exception e) {

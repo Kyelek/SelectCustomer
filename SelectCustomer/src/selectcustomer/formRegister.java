@@ -23,6 +23,8 @@ public class formRegister extends javax.swing.JFrame {
 
     public formRegister() {
         initComponents();
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 
     public static void main(String args[]) {

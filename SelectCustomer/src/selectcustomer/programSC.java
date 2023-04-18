@@ -19,12 +19,14 @@ public class programSC extends javax.swing.JFrame {
     Connection con = (Connection) conex.getConexion();
     
     
-
     /**
      * Creates new form programSC
      */
     public programSC() {
         initComponents();
+        
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         
     }
 
@@ -61,7 +63,7 @@ public class programSC extends javax.swing.JFrame {
             }
         });
     }
-    public static void iniciarPrograma(){
+    public static void iniciarPrograma(){  //TODO: hacer un boton de vuelta atras e ir cerrando las pestañas conforme se van utilizando, tambien tienes que centrar los paneles
         programSC inicio = new programSC();
         inicio.setTitle("SelecCustomer.exe");
         inicio.setVisible(true);

@@ -4,6 +4,8 @@
  */
 package selectcustomer;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author Kyelek
@@ -15,6 +17,8 @@ public class menuForm extends javax.swing.JFrame {
      */
     public menuForm() {
         initComponents();
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
      public static void main(String args[]) {
         /* Set the Nimbus look and feel */

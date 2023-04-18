@@ -21,6 +21,8 @@ public class verClientes extends javax.swing.JFrame {
     public verClientes() {
         initComponents();
         mostrarTablaClientes();
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
     
    

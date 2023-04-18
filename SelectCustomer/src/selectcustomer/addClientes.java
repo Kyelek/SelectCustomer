@@ -22,6 +22,8 @@ public class addClientes extends javax.swing.JFrame {
     
     public addClientes() {
         initComponents();
+        
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
     
     public static void main(String args[]) {

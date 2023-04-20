@@ -68,10 +68,15 @@ public class programSC extends javax.swing.JFrame {
         inicio.setTitle("SelecCustomer.exe");
         inicio.setVisible(true);
     }
+    public static void cerrarVentanaPrincipal(){
+        programSC inicio = new programSC();
+        inicio.setVisible(false);
+    }
     public void iniciaMenu(){
         menuForm menu = new menuForm();
         menu.setTitle("Menu");
-        menu.setVisible(true);    
+        menu.setVisible(true);
+          
     }
     public void iniciaregister(){
         formRegister register = new formRegister();
@@ -95,7 +100,9 @@ public class programSC extends javax.swing.JFrame {
 
                 System.out.println(usuario + contrasena + " el while si");
                 //aqui vendria el cambio al menú
+                dispose();
                 iniciaMenu();
+                //cerrarVentanaPrincipal();
 
             }else{
                 System.out.println("Usuario o contraseña erroneos");

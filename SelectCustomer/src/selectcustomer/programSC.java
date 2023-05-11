@@ -67,16 +67,23 @@ public class programSC extends javax.swing.JFrame {
         programSC inicio = new programSC();
         inicio.setTitle("SelecCustomer.exe");
         inicio.setVisible(true);
+        inicio.setLocationRelativeTo(null);
     }
     public static void cerrarVentanaPrincipal(){
         programSC inicio = new programSC();
         inicio.setVisible(false);
     }
+    /*
     public void iniciaMenu(){
         menuForm menu = new menuForm();
         menu.setTitle("Menu");
         menu.setVisible(true);
           
+    }*/
+    public static void iniciarClientes(){
+        verClientes clientes = new verClientes();
+        clientes.setTitle("Clientes");
+        clientes.setVisible(true);
     }
     public void iniciaregister(){
         formRegister register = new formRegister();
@@ -101,7 +108,7 @@ public class programSC extends javax.swing.JFrame {
                 System.out.println(usuario + contrasena + " el while si");
                 //aqui vendria el cambio al menú
                 dispose();
-                iniciaMenu();
+                iniciarClientes();
                 //cerrarVentanaPrincipal();
 
             }else{

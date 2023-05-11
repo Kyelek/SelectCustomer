@@ -71,3 +71,10 @@
 
     -->
 </project>
+
+<dependency>
+    <groupId>org.slf4j</groupId>
+    <artifactId>slf4j-api</artifactId>
+    <version>x.x.x</version>
+    <scope>compile</scope>
+</dependency>

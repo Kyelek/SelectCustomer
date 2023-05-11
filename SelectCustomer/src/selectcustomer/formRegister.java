@@ -23,7 +23,7 @@ public class formRegister extends javax.swing.JFrame {
 
     public formRegister() {
         initComponents();
-        
+        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     }
 

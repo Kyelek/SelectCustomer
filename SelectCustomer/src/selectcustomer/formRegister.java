@@ -105,6 +105,7 @@ public class formRegister extends javax.swing.JFrame {
 
         jLabel3.setText("Contraseña Nueva : ");
 
+        btn_newRegister.setBackground(new java.awt.Color(255, 204, 102));
         btn_newRegister.setText("Registrar");
         btn_newRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

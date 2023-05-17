@@ -5,18 +5,13 @@
 package selectcustomer;
 
 import conexion.conexion;
-import java.awt.Desktop;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import static java.lang.System.console;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.Desktop;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,17 +31,17 @@ public class verClientes extends javax.swing.JFrame {
     String email;
     String producto;
     String precio;
+    String id;
 
     public verClientes() {
-        initComponents();
+        initComponents(); // Iniciamos los componentes de la tabla
 
         mostrarTablaClientes();
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-
     }
 
-    public void mostrarTablaClientes() {
+    public void mostrarTablaClientes() { // funcion para mostrar la tabla con todos los campos
 
         String[] encabezados = {"Id", "Nombre", "Apellidos", "domicilio", "telefono", "Email", "Producto", "Precio"};
         String[] registros = new String[8];
@@ -78,9 +73,17 @@ public class verClientes extends javax.swing.JFrame {
         }
     }
 
-    public void registrarCliente() {
+    public void registrarCliente() { //Funcion para registrar un nuevo cliente
 
-        String SQL = "INSERT INTO clientes (nombre,apellidos,domicilio,telefono,email,producto,precio) VALUES (?,?,?,?,?,?,?)";
+        id = txt_id.getText();
+        nombre = txt_name.getText();
+        apellidos = txt_Apellidos.getText();
+        domicilio = txt_Domicilio.getText();
+        telefono = txt_Telefono.getText();
+        email = txt_email.getText();
+        producto = txt_producto.getText();
+
+        String SQL = "INSERT INTO clientes (nombre,apellidos,domicilio,telefono,email,producto) VALUES (?,?,?,?,?,?)"; // No se inserta el campo precio por que inserta en la funcion insertarPrecio() 
 
         try {
             PreparedStatement pst = con.prepareStatement(SQL);
@@ -91,19 +94,21 @@ public class verClientes extends javax.swing.JFrame {
             pst.setInt(4, Integer.parseInt(txt_Telefono.getText()));
             pst.setString(5, txt_email.getText());
             pst.setString(6, txt_producto.getText());
-            pst.setString(7, txt_precio.getText());
+            //pst.setString(7, txt_precio.getText());
             //pst.setInt(7,Integer.parseInt(txt_precio.getText()));
-
             pst.execute();
             System.out.println("Cliente guardado");
 
         } catch (Exception e) {
             System.out.println("No se ha insertado el registro" + e);
         }
+        insertarPrecio(); // insertamos el precio
+        mostrarTablaClientes();
     }
 
-    public void escribirEnTXT() throws IOException {
+    public void escribirEnTXT() throws IOException { //Funcion para escribir y el HTML y mostrarlo
 
+        id = txt_id.getText();
         nombre = txt_name.getText();
         apellidos = txt_Apellidos.getText();
         domicilio = txt_Domicilio.getText();
@@ -111,16 +116,12 @@ public class verClientes extends javax.swing.JFrame {
         email = txt_email.getText();
         producto = txt_producto.getText();
 
-        // Buscar todas las cadenas de números en producto y sumarlos
-        int total = 0;
-        Pattern pattern = Pattern.compile("\\d+");
-        Matcher matcher = pattern.matcher(producto);
-        while (matcher.find()) {
-            total += Integer.parseInt(matcher.group());
-        }
-        // Convertir el total a una cadena y guardarlo en precio
-        precio = Integer.toString(total);
+        insertarPrecio(); // la necesitamos para recoger el precio
 
+        //Salto de linea en productos con expresiones regulares
+        String productoSeparado = producto.replaceAll("(\\d+)", "$1 €<br>");
+
+        //Crear/Abrir archivo HTML
         String rutaProyecto = "D:\\Kyelek\\Documentos\\NetBeansProjects\\SelectCustomer"; // Establecer la ruta manualmente
         String rutaCarpetaArchivos = rutaProyecto + File.separator + "Clientes";
         File carpetaArchivos = new File(rutaCarpetaArchivos);
@@ -129,7 +130,7 @@ public class verClientes extends javax.swing.JFrame {
         if (!carpetaArchivos.exists()) {
             carpetaArchivos.mkdirs();
         }
-
+        //Nombre del archivo con un numero que va incrementando para evitar confusion y archivos con el mismo nombre
         int contador = 1;
         File archivo = new File(carpetaArchivos, nombre + ".html");
         while (archivo.exists()) {
@@ -138,40 +139,157 @@ public class verClientes extends javax.swing.JFrame {
         }
 
         try (FileWriter writer = new FileWriter(archivo)) {
-            writer.write("<h1>Cliente: " + nombre + " " + apellidos + "</h1>\n");
-            writer.write("<p>Domicilio: " + domicilio + "</p>\n");
-            writer.write("<p>Teléfono: " + telefono + "</p>\n");
-            writer.write("<p>Email: " + email + "</p>\n");
-            writer.write("<p>Producto: <br> " + producto + "</p>\n");
-            writer.write("<p>Precio: " + precio + "</p>\n");
-
+            // HTML Y CSS de la plantilla
+            writer.write("<body style=\"background-color: rgb(255, 204, 102);\">\n");
+            //CSS
+            writer.write("<style>\n");
+            writer.write("    .estilo {\n");
+            writer.write("        font-family: Arial, sans-serif;\n");
+            writer.write("        border-collapse: collapse;\n");
+            writer.write("        padding: 2% 5%;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-header {\n");
+            writer.write("        background-color: #f5f5f5;\n");
+            writer.write("        text-align: center;\n");
+            writer.write("        padding: 10px;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-header h1 {\n");
+            writer.write("        margin: 0;\n");
+            writer.write("        font-size: 24px;\n");
+            writer.write("        font-weight: bold;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-logo {\n");
+            writer.write("        text-align: center;\n");
+            writer.write("        margin-bottom: 20px;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-logo img {\n");
+            writer.write("        width: 200px;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-details {\n");
+            writer.write("        display: flex;\n");
+            writer.write("        justify-content: space-between;\n");
+            writer.write("        margin-top: 20px;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-details-left {\n");
+            writer.write("        flex: 1;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-details-right {\n");
+            writer.write("        flex: 1;\n");
+            writer.write("        margin-left: 65%;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-details p {\n");
+            writer.write("        margin: 5px 0;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-logo {\n");
+            writer.write("        width: 100%;\n");
+            writer.write("        text-align: center;\n");
+            writer.write("        margin-bottom: 20px;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-logo img {\n");
+            writer.write("        width: 200px;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-title {\n");
+            writer.write("        text-align: center;\n");
+            writer.write("        margin-bottom: 20px;\n");
+            writer.write("        font-size: 20px;\n");
+            writer.write("        font-weight: bold;\n");
+            writer.write("        text-transform: uppercase;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-line {\n");
+            writer.write("        border-bottom: 1px solid #ccc;\n");
+            writer.write("        margin-bottom: 20px;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-items {\n");
+            writer.write("        margin-top: 20px;\n");
+            writer.write("    }\n");
+            writer.write("    .estilo-items h3 {\n");
+            writer.write("        font-weight: bold;\n");
+            writer.write("    }\n");
+            writer.write("</style>\n");
+            //HTML
+            writer.write("<div class=\"estilo\">\n");
+            writer.write("    <div class=\"estilo-logo\">\n");
+            writer.write("        <img src=\"D:\\Kyelek\\Documentos\\NetBeansProjects\\SelectCustomer\\src\\img\\logo.PNG\" alt=\"Logo de la empresa\">\n");
+            writer.write("    </div>\n");
+            writer.write("    <div class=\"estilo-details\">\n");
+            writer.write("        <div class=\"estilo-details-left\">\n");
+            writer.write("            <p class=\"estilo-bold\"><STRONG>Nombre de la empresa:</STRONG></p>\n");
+            writer.write("            <p>CustomerSC</p>\n");
+            writer.write("            <p class=\"estilo-bold\"><STRONG>Dirección de la empresa:</STRONG></p>\n");
+            writer.write("            <p>calle falsa 123 SN/24</p>\n");
+            writer.write("            <p class=\"estilo-bold\"><STRONG>Teléfono:</STRONG></p>\n");
+            writer.write("            <p>654815359</p>\n");
+            writer.write("            <p class=\"estilo-bold\"><STRONG>Correo de contacto:</STRONG></p>\n");
+            writer.write("            <p>fco.eugenio@hotmail.com</p>\n");
+            writer.write("        </div>\n");
+            writer.write("        <div class=\"estilo-details-right\">\n");
+            writer.write("            <p class=\"estilo-bold\"><STRONG>Cliente:</STRONG></p>\n");
+            writer.write("            <p>" + nombre + " " + apellidos + "</p>\n");
+            writer.write("            <p class=\"estilo-bold\"><STRONG>Domicilio:</STRONG></p>\n");
+            writer.write("            <p>" + domicilio + "</p>\n");
+            writer.write("            <p class=\"estilo-bold\"><STRONG>Teléfono:</STRONG></p>\n");
+            writer.write("            <p>" + telefono + "</p>\n");
+            writer.write("            <p class=\"estilo-bold\"><STRONG>Email:</STRONG></p>\n");
+            writer.write("            <p>" + email + "</p>\n");
+            writer.write("        </div>\n");
+            writer.write("    </div>\n");
+            writer.write("    <div class=\"estilo-line\"></div>\n");
+            writer.write("<table class=\"estilo-items\" style=\"width: 100%; border: 1px solid #000;\">\n");
+            writer.write("    <tr>\n");
+            writer.write("        <th>Productos:</th>\n");
+            writer.write("    </tr>\n");
+            writer.write("    <tr>\n");
+            writer.write("        <td>" + productoSeparado + "</td>\n");
+            writer.write("    </tr>\n");
+            writer.write("</table>\n");
+            writer.write("<div class=\"estilo-line\"></div>\n");
+            writer.write("<table class=\"estilo-items\" style=\"width: 100%; border: 1px solid #000;\">\n");
+            writer.write("    <tr>\n");
+            writer.write("        <th>Total:</th>\n");
+            writer.write("    </tr>\n");
+            writer.write("    <tr>\n");
+            writer.write("        <td>Total: " + precio + " €</td>\n");
+            writer.write("    </tr>\n");
+            writer.write("</table>\n");
+            //FIN PLANTILLA 
+            
             JOptionPane.showMessageDialog(null, "Archivo creado correctamente en la carpeta \"archivos\".");
-            Desktop.getDesktop().open(archivo);
+            mostrarTablaClientes();
+            Desktop.getDesktop().open(archivo);//abrimos el archivo que hemos seleccionado
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "Error al crear el archivo de texto: " + e.getMessage());
         }
     }
 
-    public void actualizarCliente() {
-        // nombre,apellidos,domicilio,telefono,email,producto,precio
+    public void actualizarCliente() { //Funcion para actualizar el cliente seleccionado
+
+        id = txt_id.getText();
+        nombre = txt_name.getText();
+        apellidos = txt_Apellidos.getText();
+        domicilio = txt_Domicilio.getText();
+        telefono = txt_Telefono.getText();
+        email = txt_email.getText();
+        producto = txt_producto.getText();
+
+        insertarPrecio();// la utilizamos para actualizar el precio
+
         try {
-            String cadSQL = "update clientes set nombre =?,apellidos =?,domicilio =?, telefono=?, email=?, producto=?, precio=? where id=? ";
+            String cadSQL = "update clientes set nombre =?,apellidos =?,domicilio =?, telefono=?, email=?, producto=? where id=? ";
 
             PreparedStatement pst = con.prepareStatement(cadSQL);
 
             int numFila = tbl_tablaClientes.getSelectedRow();
             String idSelecionado = (String) tbl_tablaClientes.getValueAt(numFila, 0);
-            pst.setString(1, txt_name.getText());
-            pst.setString(2, txt_Apellidos.getText());
-            pst.setString(3, txt_Domicilio.getText());
-            pst.setString(4, txt_Telefono.getText());
-            pst.setString(5, txt_email.getText());
-            pst.setString(6, txt_producto.getText());
-            pst.setString(7, txt_precio.getText());
-            pst.setString(8, idSelecionado);
+            pst.setString(1, nombre);
+            pst.setString(2, apellidos);
+            pst.setString(3, domicilio);
+            pst.setString(4, telefono);
+            pst.setString(5, email);
+            pst.setString(6, producto);
+            //pst.setString(7, txt_precio.getText());
+            pst.setString(7, idSelecionado);
 
             pst.execute();
-
             resetCampos();
 
             System.out.println("Entrada de cliente Actualizada");
@@ -181,7 +299,7 @@ public class verClientes extends javax.swing.JFrame {
         }
     }
 
-    public void borrarCliente() {
+    public void borrarCliente() { // funcion para borrar el cliente mediante id
 
         int numFila = tbl_tablaClientes.getSelectedRow();
 
@@ -189,7 +307,7 @@ public class verClientes extends javax.swing.JFrame {
             String cadSQL = "delete from clientes where id =" + tbl_tablaClientes.getValueAt(numFila, 0);
             java.sql.Statement st = con.createStatement();
 
-            int confirmado = JOptionPane.showConfirmDialog(null, "Estas seguro de que quieres borrar al cliente " + tbl_tablaClientes.getValueAt(numFila, 1) +" ?");
+            int confirmado = JOptionPane.showConfirmDialog(null, "Estas seguro de que quieres borrar al cliente " + tbl_tablaClientes.getValueAt(numFila, 1) + " ?");
 
             if (confirmado == 0) {
                 int result = st.executeUpdate(cadSQL);
@@ -208,7 +326,36 @@ public class verClientes extends javax.swing.JFrame {
         }
     }
 
-    public void resetCampos() {
+    public void insertarPrecio() { // funcion que inserta el precio Total que lo recoge de los productos mediante expresiones regulares
+        // Buscar todas las cadenas de números en producto y sumarlos
+
+        int total = 0;
+        Pattern pattern = Pattern.compile("\\d+"); //objeto que se utiliza para hacer el patron en la cadena de la expresion regular, en este caso los numeros
+        Matcher matcher = pattern.matcher(producto); // Le decimos donde tiene que utilizar la expresion regular
+        while (matcher.find()) { // Con el for vamos a separar las condiciones que le hemos dado y a sumar las cadenas restantes obteniendo un precio total
+            total += Integer.parseInt(matcher.group());
+        }
+        // Convertir el total a una cadena y guardarlo en precio
+        precio = Integer.toString(total);
+        telefono = txt_Telefono.getText();
+        //id = txt_id.getText();
+        String SQL = "UPDATE clientes SET precio = ? WHERE telefono = ?"; // vamos a meter el precio por tlf,que es una clave unica por que cuando la utilizamos no siempre tenemos 
+                                                                        //  acceso a preseleccionar un id, como por ejemplo cuando creamos un nuevo cliente
+        try {
+
+            PreparedStatement pst = con.prepareStatement(SQL);
+
+            pst.setInt(1, Integer.parseInt(precio));
+            pst.setString(2, telefono);
+            pst.execute();
+            //pst.setString(1, precio);
+
+        } catch (Exception e) {
+            System.out.println("Error al insertar el precio en la bd");
+        }
+    }
+
+    public void resetCampos() { // hacemos reset de los campos a vaciarlos
 
         txt_id.setText("");
         txt_name.setText("");
@@ -217,7 +364,7 @@ public class verClientes extends javax.swing.JFrame {
         txt_Telefono.setText("");
         txt_email.setText("");
         txt_producto.setText("");
-        txt_precio.setText("");
+        //txt_precio.setText("");
     }
 
     /**
@@ -246,8 +393,6 @@ public class verClientes extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         txt_producto = new javax.swing.JTextArea();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        txt_precio = new javax.swing.JTextField();
         jButton4 = new javax.swing.JButton();
         btn_clienteNuevo = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
@@ -255,6 +400,7 @@ public class verClientes extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        tbl_tablaClientes.setBackground(new java.awt.Color(255, 204, 102));
         tbl_tablaClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
@@ -273,6 +419,7 @@ public class verClientes extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tbl_tablaClientes);
 
+        jButton1.setBackground(new java.awt.Color(255, 204, 102));
         jButton1.setText("Borrar Cliente");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -280,6 +427,7 @@ public class verClientes extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setBackground(new java.awt.Color(255, 204, 102));
         jButton2.setText("Editar Cliente");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -309,15 +457,7 @@ public class verClientes extends javax.swing.JFrame {
 
         jLabel9.setText("Productos");
 
-        jLabel10.setText("Precio");
-
-        txt_precio.setText(" ");
-        txt_precio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txt_precioActionPerformed(evt);
-            }
-        });
-
+        jButton4.setBackground(new java.awt.Color(255, 204, 102));
         jButton4.setText("Mostrar");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -325,6 +465,7 @@ public class verClientes extends javax.swing.JFrame {
             }
         });
 
+        btn_clienteNuevo.setBackground(new java.awt.Color(255, 204, 102));
         btn_clienteNuevo.setText("Cliente Nuevo");
         btn_clienteNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -334,6 +475,7 @@ public class verClientes extends javax.swing.JFrame {
 
         jLabel7.setText("Id :");
 
+        txt_id.setEditable(false);
         txt_id.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txt_idActionPerformed(evt);
@@ -345,59 +487,58 @@ public class verClientes extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(23, 23, 23)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_name, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_Telefono, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_Domicilio, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_Apellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel10))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_name, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_email, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_Telefono, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_Domicilio, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_Apellidos, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txt_id, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(46, 46, 46)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btn_clienteNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txt_precio, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btn_clienteNuevo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txt_id, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(71, 71, 71)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 726, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(139, Short.MAX_VALUE))
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 820, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(93, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 406, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txt_id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -428,20 +569,15 @@ public class verClientes extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(49, 49, 49)
                                 .addComponent(jLabel9)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(27, 27, 27)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txt_precio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel10)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_clienteNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(15, Short.MAX_VALUE))
+                            .addComponent(btn_clienteNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -463,16 +599,12 @@ public class verClientes extends javax.swing.JFrame {
             txt_Telefono.setText(tbl_tablaClientes.getValueAt(numFila, 4).toString());
             txt_email.setText(tbl_tablaClientes.getValueAt(numFila, 5).toString());
             txt_producto.setText(tbl_tablaClientes.getValueAt(numFila, 6).toString());
-            txt_precio.setText(tbl_tablaClientes.getValueAt(numFila, 7).toString());
+            //txt_precio.setText(tbl_tablaClientes.getValueAt(numFila, 7).toString());
         } catch (Exception e) {
             System.out.println("Esto va mal " + e);
         }
 
     }//GEN-LAST:event_tbl_tablaClientesMouseClicked
-
-    private void txt_precioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_precioActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txt_precioActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         try {
@@ -496,6 +628,7 @@ public class verClientes extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
         actualizarCliente();
+        //separarPrecio();
         mostrarTablaClientes();
 
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -554,7 +687,6 @@ public class verClientes extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton4;
-    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -571,7 +703,6 @@ public class verClientes extends javax.swing.JFrame {
     private javax.swing.JTextField txt_email;
     private javax.swing.JTextField txt_id;
     private javax.swing.JTextField txt_name;
-    private javax.swing.JTextField txt_precio;
     private javax.swing.JTextArea txt_producto;
     // End of variables declaration//GEN-END:variables
 }

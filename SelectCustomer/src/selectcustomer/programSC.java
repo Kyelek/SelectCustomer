@@ -3,31 +3,31 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package selectcustomer;
+
 import conexion.conexion;
 import java.sql.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 
 /**
  * Inicio programa
+ *
  * @author Kyelek
  */
-
 public class programSC extends javax.swing.JFrame {
 
     conexion conex = new conexion();
     Connection con = (Connection) conex.getConexion();
-    
-    
+
     /**
      * Creates new form programSC
      */
     public programSC() {
         initComponents();
-        
-        
+
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
+
     }
 
     public static void main(String args[]) {
@@ -59,37 +59,38 @@ public class programSC extends javax.swing.JFrame {
             public void run() {
                 //new programSC().setVisible(true);
                 iniciarPrograma();
-                
+
             }
         });
     }
-    public static void iniciarPrograma(){  //TODO: hacer un boton de vuelta atras e ir cerrando las pestañas conforme se van utilizando, tambien tienes que centrar los paneles
+
+    public static void iniciarPrograma() {  //TODO: hacer un boton de vuelta atras e ir cerrando las pestañas conforme se van utilizando, tambien tienes que centrar los paneles
         programSC inicio = new programSC();
+
         inicio.setTitle("SelecCustomer.exe");
         inicio.setVisible(true);
         inicio.setLocationRelativeTo(null);
+
     }
-    public static void cerrarVentanaPrincipal(){
+
+    public static void cerrarVentanaPrincipal() {
         programSC inicio = new programSC();
         inicio.setVisible(false);
+
     }
-    /*
-    public void iniciaMenu(){
-        menuForm menu = new menuForm();
-        menu.setTitle("Menu");
-        menu.setVisible(true);
-          
-    }*/
-    public static void iniciarClientes(){
+
+    public static void iniciarClientes() {
         verClientes clientes = new verClientes();
         clientes.setTitle("Clientes");
         clientes.setVisible(true);
     }
-    public void iniciaregister(){
+
+    public void iniciaregister() {
         formRegister register = new formRegister();
         register.setTitle("Registrar nuevo empleado");
         register.setVisible(true);
     }
+
     public void validarUsuario(String user, String pass) {
 
         String SQL = "Select usuario,contrasena from login WHERE contrasena = '" + pass + "' ";
@@ -100,7 +101,7 @@ public class programSC extends javax.swing.JFrame {
             Statement st = con.createStatement();
             ResultSet rset = st.executeQuery(SQL);
 
-            if(rset.next()) {
+            if (rset.next()) {
 
                 usuario = rset.getString("usuario");
                 contrasena = rset.getString("contrasena");
@@ -111,7 +112,7 @@ public class programSC extends javax.swing.JFrame {
                 iniciarClientes();
                 //cerrarVentanaPrincipal();
 
-            }else{
+            } else {
                 System.out.println("Usuario o contraseña erroneos");
             }
 
@@ -120,7 +121,7 @@ public class programSC extends javax.swing.JFrame {
         }
 
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -136,13 +137,17 @@ public class programSC extends javax.swing.JFrame {
         btn_login = new javax.swing.JButton();
         txt_pass = new javax.swing.JPasswordField();
         btn_register = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(255, 204, 102));
+        setFont(new java.awt.Font("Monospaced", 1, 10)); // NOI18N
 
         jLabel1.setText("Usuario : ");
 
         jLabel2.setText("Contraseña : ");
 
+        btn_login.setBackground(new java.awt.Color(255, 204, 102));
         btn_login.setText("Entrar");
         btn_login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -150,6 +155,7 @@ public class programSC extends javax.swing.JFrame {
             }
         });
 
+        btn_register.setBackground(new java.awt.Color(255, 204, 102));
         btn_register.setText("Nuevo Empleado");
         btn_register.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -157,31 +163,39 @@ public class programSC extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Yu Gothic", 0, 36)); // NOI18N
+        jLabel3.setText("log-in");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txt_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txt_pass, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
-                .addGap(34, 34, 34))
             .addGroup(layout.createSequentialGroup()
                 .addGap(76, 76, 76)
                 .addComponent(btn_login, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(97, 97, 97)
                 .addComponent(btn_register)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(txt_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txt_pass, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
+                .addGap(34, 34, 34))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(114, 114, 114)
+                .addGap(19, 19, 19)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
@@ -218,6 +232,7 @@ public class programSC extends javax.swing.JFrame {
     private javax.swing.JButton btn_register;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JPasswordField txt_pass;
     private javax.swing.JTextField txt_usuario;
     // End of variables declaration//GEN-END:variables

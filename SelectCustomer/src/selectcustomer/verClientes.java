@@ -190,7 +190,7 @@ public class verClientes extends javax.swing.JFrame {
             writer.write("        text-transform: uppercase;\n");
             writer.write("    }\n");
             writer.write("    .estilo-line {\n");
-            writer.write("        border-bottom: 1px solid #ccc;\n");
+            writer.write("        border-bottom: 1px solid black;\n");
             writer.write("        margin-bottom: 20px;\n");
             writer.write("    }\n");
             writer.write("    .estilo-items {\n");

@@ -106,7 +106,7 @@ public class programSC extends javax.swing.JFrame {
                 usuario = rset.getString("usuario");
                 contrasena = rset.getString("contrasena");
 
-                System.out.println(usuario + contrasena + " el while si");
+                System.out.println(usuario + contrasena );
                 //aqui vendria el cambio al menú
                 dispose();
                 iniciarClientes();

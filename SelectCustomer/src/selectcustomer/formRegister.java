@@ -104,11 +104,14 @@ public class formRegister extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Yu Gothic", 0, 18)); // NOI18N
         jLabel4.setText("Registrar nuevo empleado/a");
 
+        jLabel5.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jLabel5.setText("Nombre de Empleado : ");
 
+        jLabel6.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jLabel6.setText("Contraseña Nueva : ");
 
         btn_newRegister.setBackground(new java.awt.Color(204, 204, 255));
+        btn_newRegister.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         btn_newRegister.setText("Registrar");
         btn_newRegister.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

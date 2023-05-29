@@ -148,6 +148,7 @@ public class programSC extends javax.swing.JFrame {
         jPanel1.setBackground(new java.awt.Color(255, 204, 102));
 
         btn_login1.setBackground(new java.awt.Color(204, 204, 255));
+        btn_login1.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         btn_login1.setText("Entrar");
         btn_login1.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentHidden(java.awt.event.ComponentEvent evt) {
@@ -161,6 +162,7 @@ public class programSC extends javax.swing.JFrame {
         });
 
         btn_register1.setBackground(new java.awt.Color(204, 204, 255));
+        btn_register1.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         btn_register1.setText("Nuevo Empleado");
         btn_register1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,8 +173,10 @@ public class programSC extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Yu Gothic", 0, 36)); // NOI18N
         jLabel4.setText("log-in");
 
+        jLabel5.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jLabel5.setText("Usuario : ");
 
+        jLabel6.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jLabel6.setText("Contraseña : ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -204,7 +208,7 @@ public class programSC extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGap(0, 307, Short.MAX_VALUE)
             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel1Layout.createSequentialGroup()
                     .addGap(25, 25, 25)

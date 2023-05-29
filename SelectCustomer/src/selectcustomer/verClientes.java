@@ -161,6 +161,7 @@ public class verClientes extends javax.swing.JFrame {
             writer.write("    .estilo-logo {\n");
             writer.write("        text-align: center;\n");
             writer.write("        margin-bottom: 20px;\n");
+            writer.write("        width: 70%;\n");
             writer.write("    }\n");
             writer.write("    .estilo-logo img {\n");
             writer.write("        width: 200px;\n");
@@ -169,6 +170,7 @@ public class verClientes extends javax.swing.JFrame {
             writer.write("        display: flex;\n");
             writer.write("        justify-content: space-between;\n");
             writer.write("        margin-top: 20px;\n");
+            writer.write("        width: 50%;\n");
             writer.write("    }\n");
             writer.write("    .estilo-details-left {\n");
             writer.write("        flex: 1;\n");
@@ -179,14 +181,6 @@ public class verClientes extends javax.swing.JFrame {
             writer.write("    }\n");
             writer.write("    .estilo-details p {\n");
             writer.write("        margin: 5px 0;\n");
-            writer.write("    }\n");
-            writer.write("    .estilo-logo {\n");
-            writer.write("        width: 100%;\n");
-            writer.write("        text-align: center;\n");
-            writer.write("        margin-bottom: 20px;\n");
-            writer.write("    }\n");
-            writer.write("    .estilo-logo img {\n");
-            writer.write("        width: 200px;\n");
             writer.write("    }\n");
             writer.write("    .estilo-title {\n");
             writer.write("        text-align: center;\n");
@@ -234,25 +228,17 @@ public class verClientes extends javax.swing.JFrame {
             writer.write("        </div>\n");
             writer.write("    </div>\n");
             writer.write("    <div class=\"estilo-line\"></div>\n");
-            writer.write("<table class=\"estilo-items\" style=\"width: 100%; border: 1px solid #000;\">\n");
-            writer.write("    <tr>\n");
-            writer.write("        <th>Productos:</th>\n");
-            writer.write("    </tr>\n");
-            writer.write("    <tr>\n");
-            writer.write("        <td>" + productoSeparado + "</td>\n");
-            writer.write("    </tr>\n");
-            writer.write("</table>\n");
+            writer.write("<div class=\"estilo-items\">\n");
+            writer.write("    <div><STRONG>Productos:</STRONG></div>\n");
+            writer.write("    <div>" + productoSeparado + "</div>\n");
+            writer.write("</div>\n");
             writer.write("<div class=\"estilo-line\"></div>\n");
-            writer.write("<table class=\"estilo-items\" style=\"width: 100%; border: 1px solid #000;\">\n");
-            writer.write("    <tr>\n");
-            writer.write("        <th>Total:</th>\n");
-            writer.write("    </tr>\n");
-            writer.write("    <tr>\n");
-            writer.write("        <td>Total: " + precio + " €</td>\n");
-            writer.write("    </tr>\n");
-            writer.write("</table>\n");
+            writer.write("<div class=\"estilo-items\">\n");
+            writer.write("    <div><STRONG>Total:</STRONG></div>\n");
+            writer.write("    <div>Total: " + precio + " €</div>\n");
+            writer.write("</div>\n");
             //FIN PLANTILLA 
-            
+
             JOptionPane.showMessageDialog(null, "Archivo creado correctamente en la carpeta \"archivos\".");
             mostrarTablaClientes();
             Desktop.getDesktop().open(archivo);//abrimos el archivo que hemos seleccionado
@@ -340,7 +326,7 @@ public class verClientes extends javax.swing.JFrame {
         telefono = txt_Telefono.getText();
         //id = txt_id.getText();
         String SQL = "UPDATE clientes SET precio = ? WHERE telefono = ?"; // vamos a meter el precio por tlf,que es una clave unica por que cuando la utilizamos no siempre tenemos 
-                                                                        //  acceso a preseleccionar un id, como por ejemplo cuando creamos un nuevo cliente
+        //  acceso a preseleccionar un id, como por ejemplo cuando creamos un nuevo cliente
         try {
 
             PreparedStatement pst = con.prepareStatement(SQL);
@@ -403,6 +389,7 @@ public class verClientes extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(255, 204, 102));
 
+        tbl_tablaClientes.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         tbl_tablaClientes.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null, null},
@@ -421,11 +408,14 @@ public class verClientes extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tbl_tablaClientes);
 
+        jLabel4.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jLabel4.setText("Telefono :");
 
+        jLabel5.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jLabel5.setText("Domicilio");
 
         jButton1.setBackground(new java.awt.Color(204, 204, 255));
+        jButton1.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jButton1.setText("Borrar Cliente");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -433,9 +423,11 @@ public class verClientes extends javax.swing.JFrame {
             }
         });
 
+        jLabel6.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jLabel6.setText("E-mail");
 
         jButton2.setBackground(new java.awt.Color(204, 204, 255));
+        jButton2.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jButton2.setText("Editar Cliente");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -444,6 +436,7 @@ public class verClientes extends javax.swing.JFrame {
         });
 
         txt_producto.setColumns(20);
+        txt_producto.setFont(new java.awt.Font("Yu Gothic UI", 0, 12)); // NOI18N
         txt_producto.setRows(5);
         jScrollPane2.setViewportView(txt_producto);
 
@@ -453,9 +446,11 @@ public class verClientes extends javax.swing.JFrame {
             }
         });
 
+        jLabel9.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jLabel9.setText("Productos");
 
         jButton4.setBackground(new java.awt.Color(204, 204, 255));
+        jButton4.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jButton4.setText("Mostrar");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -463,9 +458,11 @@ public class verClientes extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jLabel2.setText("Nombre :");
 
         btn_clienteNuevo.setBackground(new java.awt.Color(204, 204, 255));
+        btn_clienteNuevo.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         btn_clienteNuevo.setText("Cliente Nuevo");
         btn_clienteNuevo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -473,8 +470,10 @@ public class verClientes extends javax.swing.JFrame {
             }
         });
 
+        jLabel7.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jLabel7.setText("Id :");
 
+        jLabel3.setFont(new java.awt.Font("Yu Gothic", 0, 12)); // NOI18N
         jLabel3.setText("Apellidos :");
 
         txt_id.setEditable(false);
